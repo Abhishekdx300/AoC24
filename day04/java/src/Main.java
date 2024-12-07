@@ -24,25 +24,34 @@ public class Main {
         int n = matrix.size();
         int m = matrix.getFirst().size();
 
-        int[] drow = {-1,0,1,0,1,1,-1,-1};
-        int[] dcol = {0,1,0,-1,1,-1,1,-1};
-        char[] str = {'X','M','A','S'};
+        int[] drow = {-1,1,1,-1};
+        int[] dcol = {-1,1,-1,1};
 
         for(int row=0;row<n;row++){
             for(int col=0;col<m;col++){
-                if(matrix.get(row).get(col)=='X'){
-                    for(int i=0;i<8;i++){
-                        int allMatch = 1;
-                        for(int j=0;j<4;j++){
-                            int nrow = row + drow[i]*j;
-                            int ncol = col + dcol[i]*j;
-                            if(nrow<0 || nrow>=n || ncol<0 || ncol>=m || matrix.get(nrow).get(ncol)!=str[j]){
-                                allMatch = 0;
-                                break;
-                            }
+                if(matrix.get(row).get(col)=='A'){
+                    // M A S  -- if one is M opposite must be S;
+                    boolean valid = true;
+                    for(int i=0;i<4;i++){
+                        int nr = row+drow[i];
+                        int nc = col+dcol[i];
+                        if(nr<0 || nr>=n || nc<0 || nc>=m){
+                            valid=false;
+                            break;
                         }
-                        result+=allMatch;
                     }
+                    if(!valid) continue;
+
+                    char c1,c2;
+                    c1 = matrix.get(row-1).get(col-1);
+                    c2 = matrix.get(row+1).get(col+1);
+                    if(c1==c2 || c1=='X' || c2=='X' || c1=='A' || c2=='A') continue;
+
+                    c1 = matrix.get(row+1).get(col-1);
+                    c2 = matrix.get(row-1).get(col+1);
+                    if(c1==c2 || c1=='X' || c2=='X' || c1=='A' || c2=='A') continue;
+
+                    result++;
                 }
             }
         }
