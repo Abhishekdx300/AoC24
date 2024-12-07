@@ -34,7 +34,7 @@ public class Main {
 
         int n = str.length();
 
-//        boolean add = true;
+        boolean add = true;
 
         for(int i=0;i<n;i++){
             if(str.charAt(i)=='m'){
@@ -47,17 +47,18 @@ public class Main {
                         Pair q = extractNum(i,str);
                         i = q.index;
                         if(str.charAt(i)==')')
-                            if(p.num != -1 && q.num!= -1){
+                            if(p.num != -1 && q.num!= -1 && add){
                                 sum+=((long) p.num *q.num);
-//                                add = false;
                             }
                     }
                 }
             }
-//            else if(str.charAt(i)=='d' && str.charAt(i+1)=='o'){
-//                if(str.charAt(i+2)=='(' && str.charAt(i+3)==')') add = true;
-//                else if(str.charAt(i+2)=='n' && str.charAt(i+3)=='\'' && str.charAt(i+4)=='t' && str.charAt(i+5)=='(' && str.charAt(i+6)==')' ) add = false;
-//            }
+            else if(str.charAt(i)=='d' && str.charAt(i+1)=='o'){
+                if(str.charAt(i+2)=='(' && str.charAt(i+3)==')'){
+                    add = true;
+                }
+                else if(str.charAt(i+2)=='n' && str.charAt(i+3)=='\'' && str.charAt(i+4)=='t' && str.charAt(i+5)=='(' && str.charAt(i+6)==')' ) add = false;
+            }
         }
 
 
