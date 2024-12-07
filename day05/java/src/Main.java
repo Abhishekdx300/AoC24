@@ -9,11 +9,12 @@ public class Main {
         Scanner scanner = new Scanner(file);
 
         ArrayList<ArrayList<Integer>>adj = new ArrayList<>();
-        for(int i=0;i<100;i++) adj.add(new ArrayList<>());
+        ArrayList<ArrayList<Integer>>prereq = new ArrayList<>();
+        for(int i=0;i<100;i++){
+            adj.add(new ArrayList<>());
+            prereq.add(new ArrayList<>());
+        }
 
-        // go from left to right
-        // check if any dep is already present in set  --> if true ---> invalid
-        // add cur to set
 
         String line = scanner.nextLine();
         while(scanner.hasNextLine() && !line.isEmpty()){
@@ -21,35 +22,76 @@ public class Main {
             int y = Integer.parseInt(line.substring(3,5));
 
             adj.get(x).add(y);
+            prereq.get(y).add(x);
             line = scanner.nextLine();
         }
 
-        int[] numStrs;
+        int[] nums;
         Long result = 0L;
 
         Set<Integer> allowed = new HashSet<>();
 
         while(scanner.hasNextLine()){
             line = scanner.nextLine();
-            numStrs = Arrays.stream(line.split(",")).mapToInt(Integer::parseInt).toArray();
+            nums = Arrays.stream(line.split(",")).mapToInt(Integer::parseInt).toArray();
 
-            int n = numStrs.length;
-            allowed.add(numStrs[0]);
+            int n = nums.length;
+
+            allowed.add(nums[0]);
             boolean possible = true;
 
             for(int i=1;i<n;i++){
-                for(int dep : adj.get(numStrs[i])){
+                for(int dep : adj.get(nums[i])){
                     if(allowed.contains(dep)){
                         possible = false;
                         break;
                     }
                 }
-                if(!possible) break;
-                allowed.add(numStrs[i]);
+                allowed.add(nums[i]);
             }
 
-            if(possible){
-                result+=numStrs[n/2];
+            if(!possible){
+                // topo sort
+                // allowed has all the current nums
+                ArrayList<Integer>indegree = new ArrayList<>(nums.length);
+                ArrayList<Integer>fixed = new ArrayList<>(nums.length);
+                for(int num : nums){
+                    int ind=0;
+                    for(Integer pre : prereq.get(num)){
+                        if(allowed.contains(pre)) ind++;
+                    }
+                    indegree.add(ind);
+                }
+
+                Queue<Integer>q = new LinkedList<>();
+
+                for(int i=0;i<n;i++){
+                    if(indegree.get(i)==0) q.add(nums[i]);
+                }
+
+                while(!q.isEmpty()){
+                    Integer top = q.poll();
+                    fixed.add(top);
+
+                    for(int next : adj.get(top)){
+                        if(allowed.contains(next)){
+                            int index=0;
+                            for(int i=0;i<n;i++){
+                                if(nums[i]==next){
+                                    index =i;
+                                    break;
+                                }
+                            }
+
+                            indegree.set(index,indegree.get(index)-1);
+                            if(indegree.get(index)==0) q.add(next);
+                        }
+                    }
+
+                }
+
+
+                result+=fixed.get(n/2);
             }
             allowed.clear();
         }
