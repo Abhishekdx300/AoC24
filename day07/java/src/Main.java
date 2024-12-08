@@ -33,6 +33,7 @@ public class Main {
         if(prev>res) return false;
 
         return isPossible(nums,res,index+1,prev+nums.get(index)) ||
-                isPossible(nums,res,index+1,prev* nums.get(index));
+                isPossible(nums,res,index+1,prev* nums.get(index)) ||
+                isPossible(nums,res,index+1,Long.parseLong(prev + String.valueOf(nums.get(index))));
     }
 }
