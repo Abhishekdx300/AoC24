@@ -19,12 +19,10 @@ public class Main {
         File file = new File("input1.txt");
         Scanner scanner = new Scanner(file);
 
-        // for each up/low/num ---> hashMap key -- val(arraylist of pos)
-        // antinode matrix
-        //iterate on hashMap --> for each 2 pos (rdiff, cdiff) --> add/reduce --> 2 pos if valid mark on matrix
-
-
         HashMap<Character, ArrayList<Pair>>map = new HashMap<>();
+
+        // for any char found...do a search if another same is found in row,col,2 diagolans
+        // if found mark them all
 
         int n=0;
         int m=0;
@@ -77,19 +75,56 @@ public class Main {
             for(int j=i+1;j<sz;j++){
                 Pair p2 = positions.get(j);
 
+                // this marking system need to change
+
+                // if p1 & p2 are in proper line (row,col,diagonal) --> mark all on them
+                // else do like before in while loop
+
+                // 1st case when --> dr==0 || dc==0 || (abs(dr)==abs(dc))
+
                 int dr = p1.row - p2.row;
                 int dc = p1.col - p2.col;
 
-                int nr = p1.row+dr;
-                int nc = p1.col+dc;
-                if(nr>=0 && nr<n && nc>=0 && nc<m) matrix.get(nr).set(nc,1);
-                nr = p2.row-dr;
-                nc = p2.col-dc;
-                if(nr>=0 && nr<n && nc>=0 && nc<m) matrix.get(nr).set(nc,1);
+                if(dr==0 || dc==0 || (Math.abs(dr)==Math.abs(dc))){
+                    if(dr!=0) dr = (dr<0) ? -1 : 1;
+                    if(dc!=0) dc = (dc<0) ? -1 : 1;
+
+                    int row = p1.row;
+                    int col = p1.col;
+                    while (row>=0 && col>=0 && row<n && col<m){
+                        matrix.get(row).set(col,1);
+                        row = row + dr;
+                        col = col + dc;
+                    }
+
+                    row = p1.row;
+                    col = p1.col;
+                    while(row>=0 && col>=0 && row<n && col<m){
+                        matrix.get(row).set(col,1);
+                        row = row - dr;
+                        col = col - dc;
+                    }
+                }else{
+
+                    matrix.get(p1.row).set(p1.col,1);
+                    matrix.get(p2.row).set(p2.col,1);
+
+                    int nr = p1.row+dr;
+                    int nc = p1.col+dc;
+                    while(nr>=0 && nr<n && nc>=0 && nc<m){
+                        matrix.get(nr).set(nc,1);
+                        nr = nr + dr;
+                        nc = nc + dc;
+                    }
+                    nr = p2.row-dr;
+                    nc = p2.col-dc;
+                    while(nr>=0 && nr<n && nc>=0 && nc<m){
+                        matrix.get(nr).set(nc,1);
+                        nr = nr - dr;
+                        nc = nc - dc;
+                    }
+                }
             }
         }
-
-
-
     }
 }
