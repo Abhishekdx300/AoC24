@@ -49,21 +49,21 @@ public class Main {
         int n = mat.size();
         int m = mat.getFirst().size();
 
-        ArrayList<ArrayList<Boolean>>visited = new ArrayList<>(45);
-        for(int i=0;i< mat.size();i++){
-            ArrayList<Boolean>temp = new ArrayList<>(mat.getFirst().size());
-            for(int j=0;j<mat.getFirst().size();j++){
-                temp.add(false);
-            }
-            visited.add(temp);
-        }
+//        ArrayList<ArrayList<Boolean>>visited = new ArrayList<>(45);
+//        for(int i=0;i< mat.size();i++){
+//            ArrayList<Boolean>temp = new ArrayList<>(mat.getFirst().size());
+//            for(int j=0;j<mat.getFirst().size();j++){
+//                temp.add(false);
+//            }
+//            visited.add(temp);
+//        }
 
         int[] drow = {-1,0,1,0};
         int[] dcol = {0,1,0,-1};
 
         Queue<Tuple>queue = new LinkedList<>();
         queue.add(new Tuple(r,c,0));
-        visited.get(r).set(c,true);
+//        visited.get(r).set(c,true);
 
         while(!queue.isEmpty()){
             Tuple cur = queue.poll();
@@ -77,8 +77,8 @@ public class Main {
                 int nrow = cur.row + drow[i];
                 int ncol = cur.col + dcol[i];
 
-                if(nrow>=0 && nrow<n && ncol>=0 && ncol<m && mat.get(nrow).get(ncol)==cur.height+1 && !visited.get(nrow).get(ncol)){
-                    visited.get(nrow).set(ncol,true);
+                if(nrow>=0 && nrow<n && ncol>=0 && ncol<m && mat.get(nrow).get(ncol)==cur.height+1){
+//                    visited.get(nrow).set(ncol,true);
                     queue.add(new Tuple(nrow,ncol,cur.height+1));
                 }
 
