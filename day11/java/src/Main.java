@@ -17,7 +17,7 @@ public class Main {
         }
 
 
-        for(int i=0;i<25;i++){
+        for(int i=0;i<75;i++){
             HashMap<Long,Long>map2 = new HashMap<>(2* map.size());
 
             for(Map.Entry<Long,Long> entry : map.entrySet()){
